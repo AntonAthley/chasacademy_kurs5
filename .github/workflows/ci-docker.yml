@@ -17,4 +17,4 @@ jobs:
         run: docker build -t antonathley/api:latest .
 
       - name: Run tests inside container
-        run: docker run antonathley/my-api:latest npm test
+        run: docker run antonathley/api:latest npm test
