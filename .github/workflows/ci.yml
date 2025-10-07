@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - "frontend/**"
 
 jobs:
   build-and-test:
@@ -20,10 +18,13 @@ jobs:
           node-version: 18
 
       - name: Install dependencies
+        working-directory: frontend
         run: npm install
 
       - name: Run tests
+        working-directory: frontend
         run: npm test
 
       - name: Build project
+        working-directory: frontend
         run: npm run build
