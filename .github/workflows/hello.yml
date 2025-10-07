@@ -10,4 +10,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Say Hello
-        run: echo "hello ci cd"
+        run: echo "hello ci cd 2.0"
