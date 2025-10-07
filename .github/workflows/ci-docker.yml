@@ -12,9 +12,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Build Docker Image on dev
+      # API
+      - name: Build Image for API
         working-directory: api
         run: docker build -t antonathley/api:latest .
 
-      - name: Run tests inside container
+      - name: API tests
         run: docker run antonathley/api:latest npm test
+
+      # Frontend
+      - name: Build Image for frontend
+        working-directory: frontend
+        run: docker build -t antonathley/frontend:latest
+
+      - name: Frontend tests
+        working-directory: frontend
+        run: docker run antonathley/frontend:latest npm test
