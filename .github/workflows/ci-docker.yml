@@ -23,7 +23,7 @@ jobs:
       # Frontend
       - name: Build Image for frontend
         working-directory: frontend
-        run: docker build -t antonathley/frontend:latest
+        run: docker build -t antonathley/frontend:latest .
 
       - name: Frontend tests
         working-directory: frontend
