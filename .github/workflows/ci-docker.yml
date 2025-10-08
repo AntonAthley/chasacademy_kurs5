@@ -21,10 +21,12 @@ jobs:
         run: docker run antonathley/api:latest npm test
 
       # Frontend
-      - name: Build Image for frontend
-        working-directory: frontend
-        run: docker build -t antonathley/frontend:latest .
-
       - name: Frontend tests
         working-directory: frontend
-        run: docker run antonathley/frontend:latest npm test
+        run: |
+          docker build --target test -t antonathley/frontend-test .
+          docker run antonathley/frontend-test
+
+      - name: Frontend build
+        working-directory: frontend
+        run: docker build -t antonathley/frontend:latest .
