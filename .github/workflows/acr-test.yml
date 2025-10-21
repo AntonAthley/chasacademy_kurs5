@@ -9,6 +9,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Log in to ACR
         run: |
           docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
