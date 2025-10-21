@@ -1,0 +1,21 @@
+name: Multi-stage CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & test builder stage
+        run: docker build --target builder -t antonathley/api:test .
+
+      - name: Build runtime image
+        run: docker build --target runtime -t antonathley/api:latest .
+
+      - name: Push runtime image
+        run: docker push antonathley/api:latest
