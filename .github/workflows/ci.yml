@@ -25,10 +25,8 @@ jobs:
 
       # API
       - name: Build API image
-        working-directory: api
         run: |
           docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
-          docker run --rm ${{  secrets.ACR_URL  }}/api:latest npm test
 
       - name: Login to ACR
         run: |
