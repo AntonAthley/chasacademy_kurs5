@@ -51,7 +51,7 @@ jobs:
 
       - name: Build frontend runtime image
         run: |
-          docker build --target runtime -t ${{ secrets.ACR_URL }}/frontend:latest ./frontend
+          docker build -t ${{ secrets.ACR_URL }}/frontend:latest ./frontend
 
       - name: Push frontend image to ACR
         run: |
