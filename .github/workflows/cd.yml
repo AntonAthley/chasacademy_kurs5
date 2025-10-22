@@ -1,0 +1,20 @@
+name: Deploy test web app
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure Web App (container)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "antona-webapp"
+          images: "${{ secrets.ACR_URL }}/api:latest"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
