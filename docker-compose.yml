@@ -1,0 +1,37 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: dockerfile
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${WEBSITES_PORT:-3000}
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - API_URL=${API_URL:-http://localhost:3000}
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+  db:
+    image: postgres:14-alpine
+    environment:
+      POSTGRES_USER: local
+      POSTGRES_PASSWORD: localpass
+      POSTGRES_DB: localdb
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
