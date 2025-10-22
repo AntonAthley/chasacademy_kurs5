@@ -23,6 +23,23 @@ jobs:
         with:
           node-version: 20
 
+      # API
+      - name: Build API image
+        working-directory: api
+        run: docker build --target runtime -t ${{ secrets.ACR_URL }}/antonathley/api:dev .
+
+      - name: Login to ACR
+        env:
+          ACR_URL: ${{ secrets.ACR_URL }}
+          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
+          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
+        run: |
+          echo "$ACR_PASSWORD" | docker login $ACR_URL -u "$ACR_USERNAME" --password-stdin
+
+      - name: Push API image to ACR
+        run: docker push ${{ secrets.ACR_URL }}/antonathley/api:dev
+
+      # FRONTEND
       - name: Install dependencies
         working-directory: frontend
         run: npm install
@@ -34,6 +51,13 @@ jobs:
       - name: Run tests
         working-directory: frontend
         run: npm test
+
+      - name: Build frontend runtime image
+        working-directory: frontend
+        run: docker build --target runtime -t ${{ secrets.ACR_URL }}/antonathley/frontend:dev .
+
+      - name: Push frontend image to ACR
+        run: docker push ${{ secrets.ACR_URL }}/antonathley/frontend:dev
 
       - name: Build project
         if: github.ref == 'refs/heads/main'
