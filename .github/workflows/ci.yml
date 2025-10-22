@@ -26,18 +26,16 @@ jobs:
       # API
       - name: Build API image
         working-directory: api
-        run: docker build --target runtime -t ${{ secrets.ACR_URL }}/antonathley/api:dev .
+        run: docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
+          docker run --rm ${{  secrets.ACR_URL  }}/api:latest npm test
 
       - name: Login to ACR
-        env:
-          ACR_URL: ${{ secrets.ACR_URL }}
-          ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
-          ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
         run: |
-          echo "$ACR_PASSWORD" | docker login $ACR_URL -u "$ACR_USERNAME" --password-stdin
+          docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
 
       - name: Push API image to ACR
-        run: docker push ${{ secrets.ACR_URL }}/antonathley/api:dev
+        run: |
+          docker push ${{  secrets.ACR_URL  }}/api:latest
 
       # FRONTEND
       - name: Install dependencies
@@ -54,10 +52,12 @@ jobs:
 
       - name: Build frontend runtime image
         working-directory: frontend
-        run: docker build --target runtime -t ${{ secrets.ACR_URL }}/antonathley/frontend:dev .
+        run: |
+          docker build --target runtime -t ${{ secrets.ACR_URL }}/frontend:latest ./frontend
 
       - name: Push frontend image to ACR
-        run: docker push ${{ secrets.ACR_URL }}/antonathley/frontend:dev
+        run: |
+          docker push ${{ secrets.ACR_URL }}/frontend:latest
 
       - name: Build project
         if: github.ref == 'refs/heads/main'
