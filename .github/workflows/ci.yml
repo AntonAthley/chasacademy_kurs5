@@ -1,9 +1,10 @@
-name: Frontend CI
+name: CI pipelne
 
 on:
   push:
     branches:
       - main
+      - dev
       - feature/*
 
   pull_request:
@@ -18,19 +19,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      # - name: Setup Node.js
+      #   uses: actions/setup-node@v4
+      #   with:
+      #     node-version: 20
+
+      - name: Log in to ACR
+        run: |
+          docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
 
       # API
       - name: Build API image
         run: |
           docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
 
-      - name: Login to ACR
-        run: |
-          docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
+      - name: Run API tests
+        run: docker run --rm ${{ secrets.ACR_URL }}/api:latest npm test
 
       - name: Push API image to ACR
         run: |
@@ -57,11 +61,7 @@ jobs:
         run: |
           docker push ${{ secrets.ACR_URL }}/frontend:latest
 
-      - name: Build project
-        if: github.ref == 'refs/heads/main'
-        working-directory: frontend
-        run: npm run build
-
+      # LOCAL DEPLOY TEST
       - name: Mock deploy
         if: github.ref == 'refs/heads/main'
         run: echo "mock deploy done (y)"
