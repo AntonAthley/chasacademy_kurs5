@@ -34,7 +34,7 @@ jobs:
           docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
 
       - name: Run API tests
-        run: docker run --rm ${{ secrets.ACR_URL }}/api:latest npm test
+        run: docker run ${{ secrets.ACR_URL }}/api:latest npm test
 
       - name: Push API image to ACR
         run: |
