@@ -1,4 +1,4 @@
-name: CI pipelne
+name: CI pipeline
 
 on:
   push:
@@ -19,11 +19,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # - name: Setup Node.js
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: 20
-
       - name: Log in to ACR
         run: |
           docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
@@ -33,13 +28,13 @@ jobs:
         run: |
           docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
 
+      - name: Run API tests
+        run: docker run --rm ${{ secrets.ACR_URL }}/api:latest npm test
 
-          - name: Push API image to ACR
-          run: |
+      - name: Push API image to ACR
+        run: |
           docker push ${{  secrets.ACR_URL  }}/api:latest
 
-          - name: Run API tests
-            run: docker run ${{ secrets.ACR_URL }}/api:latest npm test
       # FRONTEND
       - name: Install dependencies
         working-directory: frontend
