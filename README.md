@@ -34,3 +34,9 @@
 - **Snabbare builds** – `package*.json` kopieras tidigt så Docker kan cachea smartare.
 - **Säkrare** – produktionscontainern kör utan utvecklingsverktyg.
 - **Smidigare CI/CD** – multi-stage gör det enklare att bygga, testa och rulla ut i samma flöde.
+
+## V41
+
+**Permanent staging** delas med kund hellre än preview för att få ett ytterligare skyddsnät/testområde innan produkten delas vidare.
+
+**Val av verktyg** Körde på Azure igen för prod, pga kan så gott som copy paste tidigare kod.
