@@ -1,0 +1,33 @@
+name: Prod CI (build → deploy)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to ACR
+        run: |
+          echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_URL }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
+
+      - name: Build API image
+        run: |
+          docker build -t ${{ secrets.ACR_URL }}/api:${{ github.sha }} ./api
+
+      - name: Push API image to ACR
+        run: |
+          docker push ${{ secrets.ACR_URL }}/api:${{ github.sha }}
+
+      - name: Deploy to Azure Web App (PROD)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "antona-webapp-prod"
+          images: "${{ secrets.ACR_URL }}/api:${{ github.sha }}"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_PROD }}

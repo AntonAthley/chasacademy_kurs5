@@ -40,3 +40,4 @@
 **Permanent staging** delas med kund hellre än preview för att få ett ytterligare skyddsnät/testområde innan produkten delas vidare.
 
 **Val av verktyg** Körde på Azure igen för prod, pga kan så gott som copy paste tidigare kod.
+**URL: https://brave-rock-006972b03.3.azurestaticapps.net/**
