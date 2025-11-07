@@ -21,19 +21,19 @@ jobs:
 
       - name: Log in to ACR
         run: |
-          docker login ${{  secrets.ACR_URL  }} -u ${{  secrets.ACR_USERNAME  }} -p ${{ secrets.ACR_PASSWORD }}
+          docker login ${{ secrets.ACR_URL }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
 
       # API
       - name: Build API image
         run: |
-          docker build -t ${{  secrets.ACR_URL  }}/api:latest ./api
+          docker build -t ${{ secrets.ACR_URL }}/api:${{ github.sha }} ./api
 
       - name: Run API tests
-        run: docker run --rm ${{ secrets.ACR_URL }}/api:latest npm test
+        run: docker run --rm ${{ secrets.ACR_URL }}/api:${{ github.sha }} npm test
 
       - name: Push API image to ACR
         run: |
-          docker push ${{  secrets.ACR_URL  }}/api:latest
+          docker push ${{ secrets.ACR_URL }}/api:${{ github.sha }}
 
       # FRONTEND
       - name: Install dependencies
@@ -50,13 +50,8 @@ jobs:
 
       - name: Build frontend runtime image
         run: |
-          docker build -t ${{ secrets.ACR_URL }}/frontend:latest ./frontend
+          docker build -t ${{ secrets.ACR_URL }}/frontend:${{ github.sha }} ./frontend
 
       - name: Push frontend image to ACR
         run: |
-          docker push ${{ secrets.ACR_URL }}/frontend:latest
-
-      # LOCAL DEPLOY TEST
-      - name: Mock deploy
-        if: github.ref == 'refs/heads/main'
-        run: echo "mock deploy done (y)"
+          docker push ${{ secrets.ACR_URL }}/frontend:${{ github.sha }}
