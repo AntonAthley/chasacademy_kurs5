@@ -27,6 +27,19 @@ jobs:
       - name: Perform CodeQL analysis
         uses: github/codeql-action/analyze@v3
 
+      - name: Install dependencies & generate docs
+        run: |
+          npm install
+          npm run docs:generate
+        working-directory: ./api
+
+      - name: Deploy docs to Github Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN  }}
+          publish_branch: gh-pages
+          publish_dir: ./api/docs
+
       - name: Log in to ACR
         run: |
           echo "${{ secrets.ACR_PASSWORD }}" | docker login ${{ secrets.ACR_URL }} -u ${{ secrets.ACR_USERNAME }} --password-stdin
