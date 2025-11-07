@@ -1,4 +1,4 @@
-name: CI pipeline
+name: CI pipeline Frontend
 
 on:
   push:
@@ -24,16 +24,16 @@ jobs:
           docker login ${{ secrets.ACR_URL }} -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
 
       # API
-      - name: Build API image
-        run: |
-          docker build -t ${{ secrets.ACR_URL }}/api:${{ github.sha }} ./api
+      # - name: Build API image
+      #   run: |
+      #     docker build -t ${{ secrets.ACR_URL }}/api:${{ github.sha }} ./api
 
-      - name: Run API tests
-        run: docker run --rm ${{ secrets.ACR_URL }}/api:${{ github.sha }} npm test
+      # - name: Run API tests
+      #   run: docker run --rm ${{ secrets.ACR_URL }}/api:${{ github.sha }} npm test
 
-      - name: Push API image to ACR
-        run: |
-          docker push ${{ secrets.ACR_URL }}/api:${{ github.sha }}
+      # - name: Push API image to ACR
+      #   run: |
+      #     docker push ${{ secrets.ACR_URL }}/api:${{ github.sha }}
 
       # FRONTEND
       - name: Install dependencies
